@@ -1,7 +1,7 @@
 import pygame
 import os
 import nn
-import game
+import logic.game as game
 import math
 import numpy as np
 os.environ['SDL_VIDEO_WINDOW_POS'] = "0,30"
