@@ -52,23 +52,26 @@ class Game():
     def __down(self):
         self.__turn_matrix()
         self.__turn_matrix()
-        self.__up()
+        reward = self.__up()
         self.__turn_matrix()
         self.__turn_matrix()
+        return reward
 
     def __left(self):
         self.__turn_matrix()
-        self.__up()
+        reward = self.__up()
         self.__turn_matrix()
         self.__turn_matrix()
         self.__turn_matrix()
+        return reward
 
     def __right(self):
         self.__turn_matrix()
         self.__turn_matrix()
         self.__turn_matrix()
-        self.__up()
+        reward = self.__up()
         self.__turn_matrix()
+        return reward
 
     def __get_allowed_directions(self):
         allowed_directions = [False,False,False,False]
@@ -134,6 +137,8 @@ class Game():
         for i in range(4):
             if allowed_directions[i] == True:
                 done = False
+        if reward == 0:
+            reward = -1
         return done, reward
 
     def get_state(self):
@@ -146,3 +151,11 @@ class Game():
                 if el != 0:
                     matrix_adj[i][j] = 2**el
         return matrix_adj
+
+    def get_state_ml(self):
+        data = [[[0]*4 for _ in range(4)] for __ in range(16)]
+        for i, row in enumerate(self.__matrix):
+            for j, el in enumerate(row):
+                if el != 0:
+                    data[el-1][i][j] = 1
+        return data
