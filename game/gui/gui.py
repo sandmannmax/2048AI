@@ -13,7 +13,7 @@ clock = pygame.time.Clock()
 for i in range(1,5):
     for x in range(1,5):
         pygame.draw.rect(gameDisplay, (255,254,239), (-50+x*100,50+i*100,99,99))
-run = True
+done = False
 score = 0
 
 #-------------------------------------------------------------------------------------------------------------------
@@ -45,10 +45,11 @@ def draw(g: game.Game):
         for x in range(1,5):
             pygame.draw.rect(gameDisplay, (255,254,239), (-50+x*100,50+i*100,99,99))
     count = -1
-    for x in g.matrix:
+    matrix = g.get_state_gui()
+    for x in matrix:
         for i in x:
             count += 1
-            if i != -1:
+            if i != 0:
                 pygame.draw.rect(gameDisplay, (200-((int)(math.log(i,2)))*10,230-((int)(math.log(i,2)))*10,240-((int)(math.log(i,2)))*10), (50+count%4*100,150+(int)(count/4)*100,99,99))
                 message_display(i,(100+count%4*100,200+((int)((count/4)))*100))
     printScore(g.score)
@@ -59,12 +60,12 @@ draw(g)
 
 mapping = {pygame.K_UP: Direction.UP, pygame.K_RIGHT: Direction.RIGHT, pygame.K_DOWN: Direction.DOWN, pygame.K_LEFT: Direction.LEFT}
 
-while run:
+while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
+            done = True
         if event.type == pygame.KEYDOWN:
-            done, run, _ = g.step(mapping[event.key])
+            done, _ = g.step(mapping[event.key])
         draw(g)
         pygame.display.update()
         clock.tick(30)
